@@ -83,7 +83,7 @@ impl Point {
     };
 
     /// see paper
-    pub fn to_weierstrass(self) -> (GFp5, GFp5, bool) { 
+    pub fn to_weierstrass(self) -> ([GFp5; 2], bool) { 
         const THREE: GFp5 = GFp5([
             GFp::from_u64_reduce(3),
             GFp::ZERO,
@@ -102,7 +102,7 @@ impl Point {
 
         let is_infinity = c == 0xFFFFFFFFFFFFFFFF;
 
-        (x + Self::A * THREE.invert(), -w * x, is_infinity)
+        ([x + Self::A * THREE.invert(), -w * x], is_infinity)
     }
 
     /// Encode this point into a field element. Encoding is always
