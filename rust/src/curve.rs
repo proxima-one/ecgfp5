@@ -82,6 +82,29 @@ impl Point {
         T: GFp5::ONE,
     };
 
+    /// see paper
+    pub fn to_weierstrass(self) -> (GFp5, GFp5, bool) { 
+        const THREE: GFp5 = GFp5([
+            GFp::from_u64_reduce(3),
+            GFp::ZERO,
+            GFp::ZERO,
+            GFp::ZERO,
+            GFp::ZERO,
+        ]);
+
+        let w = self.encode();
+        let e = w.square() - Self::A;
+        let delta = e.square() - Self::B_MUL4;
+        let (r, c) = delta.sqrt();
+        let x1 = (e + r).half();
+        let x2 = (e - r).half();
+        let x = GFp5::select(x1.legendre().isone(), x1, x2);
+
+        let is_infinity = c == 0xFFFFFFFFFFFFFFFF;
+
+        (x + Self::A * THREE.invert(), -w * x, is_infinity)
+    }
+
     /// Encode this point into a field element. Encoding is always
     /// canonical.
     pub fn encode(self) -> GFp5 {
