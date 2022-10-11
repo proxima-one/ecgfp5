@@ -209,6 +209,13 @@ impl Scalar {
         (r, c)
     }
 
+    /// Helper function for getting a scalar from a u64
+    /// the group order is bigger than u64::MAX so this will always work
+    pub fn from_u64(n: u64) -> Self {
+        let buf = n.to_le_bytes();
+        Self::decode(&buf).0
+    }
+
     /// Decode the provided byte slice into a scalar. The bytes are
     /// interpreted into an integer in little-endian unsigned convention.
     /// All slice bytes are read, and the value is REDUCED modulo n. This
