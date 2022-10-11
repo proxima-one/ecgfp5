@@ -100,7 +100,7 @@ impl Point {
         let x2 = (e - r).half();
         let x = GFp5::select(x1.legendre().isone(), x1, x2);
 
-        let is_infinity = c == 0xFFFFFFFFFFFFFFFF;
+        let is_infinity = c == 0;
 
         ([x + Self::A * THREE.invert(), -w * x], is_infinity)
     }
