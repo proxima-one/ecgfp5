@@ -98,11 +98,11 @@ impl Point {
         let (r, c) = delta.sqrt();
         let x1 = (e + r).half();
         let x2 = (e - r).half();
-        let x = GFp5::select(x1.legendre().isone(), x1, x2);
+        let x = GFp5::select(x1.legendre().isone(), x2, x1);
 
         let is_infinity = c == 0;
 
-        ([x + Self::A * THREE.invert(), -w * x], is_infinity)
+        ([x + Self::A / THREE, w * x], is_infinity)
     }
 
     /// Encode this point into a field element. Encoding is always
